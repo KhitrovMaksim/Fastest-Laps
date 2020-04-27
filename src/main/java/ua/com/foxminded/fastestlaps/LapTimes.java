@@ -16,7 +16,8 @@ public class LapTimes {
     private static String DASH = "-";
     private static String LINE_END = "\n";
 
-    public String showReport(String pathToTimeLogStart, String pathToTimeLogEnd, String pathToAbbreviations) throws IOException, ParseException {
+    public String showReport(String pathToTimeLogStart, String pathToTimeLogEnd, String pathToAbbreviations)
+            throws IOException, ParseException {
 
         Map<String, String> timeLogEnd = new HashMap<>();
         timeLogEnd = parseTimeLog(pathToTimeLogEnd);
@@ -47,7 +48,7 @@ public class LapTimes {
         return Files.lines(Paths.get(fileName)).map(s -> s.split("_", 3)).collect(Collectors.toMap(a -> a[0], a -> a));
     }
 
-    private Map<String, String[]> composeIndentAbbreviations(Map<String, String[]> abbreviations) throws IOException {
+    private Map<String, String[]> composeIndentAbbreviations(Map<String, String[]> abbreviations) {
         int lengthOfDriverName = 0;
         int lengthOfTeamName = 0;
         String[] description;
@@ -69,20 +70,17 @@ public class LapTimes {
             if (description[1].length() < lengthOfDriverName) {
                 description[1] = description[1]
                         + calculateIndentation(INDENT, lengthOfDriverName - description[1].length());
-
             }
 
             if (description[2].length() < lengthOfTeamName) {
                 description[2] = description[2]
                         + calculateIndentation(INDENT, lengthOfTeamName - description[2].length());
-
             }
 
             entry.setValue(description);
         }
 
         return abbreviations;
-
     }
 
     private String calculateIndentation(String indent, int requiredLength) {
@@ -97,14 +95,13 @@ public class LapTimes {
     private Map<String, String> composeLapTime(Map<String, String> startLog, Map<String, String> endLog)
             throws ParseException {
         Map<String, String> lapTime = new HashMap<>();
+        
         for (Map.Entry<String, String> entry : startLog.entrySet()) {
             lapTime.put(entry.getKey(), calculateLapTime(entry.getValue(), endLog.get(entry.getKey())));
         }
 
-        Map<String, String> result = lapTime.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors
+        return lapTime.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors
                 .toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-
-        return result;
     }
 
     private String calculateLapTime(String startTime, String endTime) throws ParseException {
