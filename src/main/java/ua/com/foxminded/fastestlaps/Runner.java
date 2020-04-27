@@ -11,7 +11,6 @@ public class Runner {
         String pathToabbreviations = "src\\main\\resources\\abbreviations.txt";
         LapTimes lapTimes = new LapTimes();
         
-        
         System.out.println(lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
 
     }
