@@ -1,6 +1,5 @@
 package ua.com.foxminded.fastestlaps;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,7 +15,7 @@ public class LapTimes {
     private FileReader fileReader = new FileReader();
 
     public String showReport(String pathToTimeLogStart, String pathToTimeLogEnd, String pathToAbbreviations)
-            throws IOException, ParseException {
+            throws ValidationDataException, ParseException {
 
         Map<String, String> timeLogEnd = new HashMap<>();
         timeLogEnd = parseTimeLog(pathToTimeLogEnd);
@@ -36,13 +35,13 @@ public class LapTimes {
         return composeResult(abbreviationsWithIndents, lapTime);
     }
 
-    private Map<String, String> parseTimeLog(String fileName) throws IOException {
+    private Map<String, String> parseTimeLog(String fileName) throws ValidationDataException {
 
         return fileReader.parseFile(fileName).map(s -> s.replaceAll("\\d{4}-\\d{2}-\\d{2}", ""))
                 .map(s -> s.split("_", 2)).collect(Collectors.toMap(a -> a[0], a -> a[1]));
     }
 
-    private Map<String, String[]> parseAbbreviations(String fileName) throws IOException {
+    private Map<String, String[]> parseAbbreviations(String fileName) throws ValidationDataException {
 
         return fileReader.parseFile(fileName).map(s -> s.split("_", 3)).collect(Collectors.toMap(a -> a[0], a -> a));
     }
@@ -54,6 +53,7 @@ public class LapTimes {
 
         for (Map.Entry<String, String[]> entry : abbreviations.entrySet()) {
             description = abbreviations.get(entry.getKey());
+
             if (lengthOfDriverName < description[1].length()) {
                 lengthOfDriverName = description[1].length();
             }
@@ -61,6 +61,7 @@ public class LapTimes {
             if (lengthOfTeamName < description[2].length()) {
                 lengthOfTeamName = description[2].length();
             }
+
         }
 
         for (Map.Entry<String, String[]> entry : abbreviations.entrySet()) {
@@ -94,7 +95,7 @@ public class LapTimes {
     private Map<String, String> composeLapTime(Map<String, String> startLog, Map<String, String> endLog)
             throws ParseException {
         Map<String, String> lapTime = new HashMap<>();
-        
+
         for (Map.Entry<String, String> entry : startLog.entrySet()) {
             lapTime.put(entry.getKey(), calculateLapTime(entry.getValue(), endLog.get(entry.getKey())));
         }
@@ -106,7 +107,6 @@ public class LapTimes {
     private String calculateLapTime(String startTime, String endTime) throws ParseException {
         SimpleDateFormat timeFormatInput = new SimpleDateFormat("HH:mm:ss.SSS");
         SimpleDateFormat timeFormatOutput = new SimpleDateFormat("mm:ss.SSS");
-
         Date startTimeFomated = timeFormatInput.parse(startTime);
         Date endTimeFomated = timeFormatInput.parse(endTime);
         Date lapTime = new Date(endTimeFomated.getTime() - startTimeFomated.getTime());
@@ -114,8 +114,7 @@ public class LapTimes {
         return timeFormatOutput.format(lapTime);
     }
 
-    private String composeResult(Map<String, String[]> abbreviations, Map<String, String> lapTime)
-            throws ParseException {
+    private String composeResult(Map<String, String[]> abbreviations, Map<String, String> lapTime) {
         String result = "";
         int i = 1;
         int delimiterLine = 16;

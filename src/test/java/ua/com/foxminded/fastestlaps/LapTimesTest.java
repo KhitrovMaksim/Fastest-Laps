@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
-import java.nio.file.NoSuchFileException;
 import java.text.ParseException;
 
 import org.junit.jupiter.api.Test;
@@ -15,34 +14,7 @@ public class LapTimesTest {
     String pathToTimeLogStart = "src\\test\\resources\\start.log";
     String pathToTimeLogEnd = "src\\test\\resources\\end.log";
     String pathToabbreviations = "src\\test\\resources\\abbreviations.txt";
-
-    @Test
-    void lapTimes_ThrowsException_IfStartLogFileIsNotFound() {
-        pathToTimeLogStart = "start.log";
-
-        assertThrows(NoSuchFileException.class, () -> {
-            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-    }
-
-    @Test
-    void lapTimes_ThrowsException_IfEndLogFileIsNotFound() {
-        pathToTimeLogEnd = "end.log";
-
-        assertThrows(NoSuchFileException.class, () -> {
-            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-    }
-
-    @Test
-    void lapTimes_ThrowsException_IfAbbreviationFilesIsNotFound() {
-        pathToabbreviations = "abbreviations.txt";
-
-        assertThrows(NoSuchFileException.class, () -> {
-            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-    }
-
+    
     @Test
     void lapTimes_ThrowsException_IfEndLogWitoutLine() {
         pathToTimeLogEnd = "src\\test\\resources\\endWithoutLine.log";
@@ -62,7 +34,7 @@ public class LapTimesTest {
     }
 
     @Test
-    void lapTimes_ShouldReturnCertainString_IfInputIsThreeTeam() throws IOException, ParseException {
+    void lapTimes_ShouldReturnCertainString_IfInputIsThreeTeam() throws IOException, ParseException, ValidationDataException {
 
         String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
                 + " 2. Romain Grosjean | HAAS FERRARI         | 01:12.930\n"
@@ -90,7 +62,7 @@ public class LapTimesTest {
     }
 
     @Test
-    void lapTimes_ThrowsException_IfInStartLogDeletedDate() throws IOException, ParseException {
+    void lapTimes_ThrowsException_IfInStartLogDeletedDate() throws ValidationDataException, ParseException {
         pathToTimeLogStart = "src\\test\\resources\\startWithoutDate.log";
 
         String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
@@ -128,7 +100,7 @@ public class LapTimesTest {
     }
 
     @Test
-    void lapTimes_ThrowsException_IfInEndLogDeletedDate() throws IOException, ParseException {
+    void lapTimes_ThrowsException_IfInEndLogDeletedDate() throws ValidationDataException, ParseException {
         pathToTimeLogEnd = "src\\test\\resources\\endWithoutDate.log";
 
         String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
@@ -148,7 +120,7 @@ public class LapTimesTest {
     }
 
     @Test
-    void lapTimes_ThrowsException_IfInaAbbreviationsDeletedTeam() throws IOException, ParseException {
+    void lapTimes_ThrowsException_IfInaAbbreviationsDeletedTeam() throws ValidationDataException, ParseException {
         pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutTeam.txt";
 
         String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
@@ -159,7 +131,7 @@ public class LapTimesTest {
     }
 
     @Test
-    void lapTimes_ThrowsException_IfInaAbbreviationsDeletedDriver() throws IOException, ParseException {
+    void lapTimes_ThrowsException_IfInaAbbreviationsDeletedDriver() throws ValidationDataException, ParseException {
         pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutDriver.txt";
 
         String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
