@@ -1,8 +1,6 @@
 package ua.com.foxminded.fastestlaps;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,6 +13,7 @@ public class LapTimes {
     private static String INDENT = " ";
     private static String DASH = "-";
     private static String LINE_END = "\n";
+    private FileReader fileReader = new FileReader();
 
     public String showReport(String pathToTimeLogStart, String pathToTimeLogEnd, String pathToAbbreviations)
             throws IOException, ParseException {
@@ -39,13 +38,13 @@ public class LapTimes {
 
     private Map<String, String> parseTimeLog(String fileName) throws IOException {
 
-        return Files.lines(Paths.get(fileName)).map(s -> s.replaceAll("\\d{4}-\\d{2}-\\d{2}", ""))
+        return fileReader.parseFile(fileName).map(s -> s.replaceAll("\\d{4}-\\d{2}-\\d{2}", ""))
                 .map(s -> s.split("_", 2)).collect(Collectors.toMap(a -> a[0], a -> a[1]));
     }
 
     private Map<String, String[]> parseAbbreviations(String fileName) throws IOException {
 
-        return Files.lines(Paths.get(fileName)).map(s -> s.split("_", 3)).collect(Collectors.toMap(a -> a[0], a -> a));
+        return fileReader.parseFile(fileName).map(s -> s.split("_", 3)).collect(Collectors.toMap(a -> a[0], a -> a));
     }
 
     private Map<String, String[]> composeIndentAbbreviations(Map<String, String[]> abbreviations) {
