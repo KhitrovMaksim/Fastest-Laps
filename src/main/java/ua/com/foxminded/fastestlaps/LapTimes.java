@@ -118,14 +118,16 @@ public class LapTimes {
             throws ParseException {
         String result = "";
         int i = 1;
+        int delimiterLine = 16;
+        int indentedNumbers = 10;
         String[] description;
 
         for (Map.Entry<String, String> entry : lapTime.entrySet()) {
-            if (i == 16) {
+            if (i == delimiterLine) {
                 result += calculateIndentation(DASH, calculateLengthOfDelimiter(abbreviations)) + LINE_END;
             }
 
-            if (i < 10) {
+            if (i < indentedNumbers) {
                 result += " ";
             }
 
