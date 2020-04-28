@@ -16,16 +16,21 @@ public class LapTimes {
 
     public String showReport(String pathToTimeLogStart, String pathToTimeLogEnd, String pathToAbbreviations)
             throws ValidationDataException, ParseException {
+        Boolean validateFilesLenght = validateFilesLenght(pathToTimeLogStart, pathToTimeLogEnd, pathToAbbreviations);
 
+        if (Boolean.FALSE.equals(validateFilesLenght)) {
+            return "The number of lines in the files should be the same";
+        }
+        
         Map<String, String> timeLogEnd = new HashMap<>();
         timeLogEnd = parseTimeLog(pathToTimeLogEnd);
-
+        
         Map<String, String> timeLogStart = new HashMap<>();
         timeLogStart = parseTimeLog(pathToTimeLogStart);
 
         Map<String, String[]> abbreviations = new HashMap<>();
         abbreviations = parseAbbreviations(pathToAbbreviations);
-
+        
         Map<String, String[]> abbreviationsWithIndents = new HashMap<>();
         abbreviationsWithIndents = composeIndentAbbreviations(abbreviations);
 
@@ -33,6 +38,19 @@ public class LapTimes {
         lapTime = composeLapTime(timeLogStart, timeLogEnd);
 
         return composeResult(abbreviationsWithIndents, lapTime);
+    }
+    
+    private Boolean validateFilesLenght(String pathToTimeLogStart, String pathToTimeLogEnd, String pathToAbbreviations)
+            throws ValidationDataException {
+        int startLogLength = (int) fileReader.parseFile(pathToTimeLogStart).count();
+        int endLogLength = (int) fileReader.parseFile(pathToTimeLogEnd).count();
+        int abbreviationsLength = (int) fileReader.parseFile(pathToAbbreviations).count();
+
+        if (startLogLength == endLogLength && startLogLength == abbreviationsLength) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private Map<String, String> parseTimeLog(String fileName) throws ValidationDataException {
@@ -146,5 +164,5 @@ public class LapTimes {
 
         return length;
     }
-    
+
 }

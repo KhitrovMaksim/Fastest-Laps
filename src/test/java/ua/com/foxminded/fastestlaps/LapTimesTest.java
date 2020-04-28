@@ -16,21 +16,27 @@ public class LapTimesTest {
     String pathToabbreviations = "src\\test\\resources\\abbreviations.txt";
     
     @Test
-    void lapTimes_ThrowsException_IfEndLogWitoutLine() {
+    void lapTimes_ExpectedMessageAboutLength_IfStartLogWitoutLine() throws ValidationDataException, ParseException {
+        String expected = "The number of lines in the files should be the same";
+        pathToTimeLogEnd = "src\\test\\resources\\startWithoutLine.log";
+
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+    }
+    
+    @Test
+    void lapTimes_ExpectedMessageAboutLength_IfEndLogWitoutLine() throws ValidationDataException, ParseException {
+        String expected = "The number of lines in the files should be the same";
         pathToTimeLogEnd = "src\\test\\resources\\endWithoutLine.log";
 
-        assertThrows(NullPointerException.class, () -> {
-            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
 
     @Test
-    void lapTimes_ThrowsException_IfAbbreviationsWithoutLine() {
+    void lapTimes_ExpectedMessageAboutLength_IfAbbreviationsWithoutLine() throws ValidationDataException, ParseException {
+        String expected = "The number of lines in the files should be the same";
         pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutLine.txt";
 
-        assertThrows(NullPointerException.class, () -> {
-            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
 
     @Test
@@ -120,7 +126,7 @@ public class LapTimesTest {
     }
 
     @Test
-    void lapTimes_ThrowsException_IfInaAbbreviationsDeletedTeam() throws ValidationDataException, ParseException {
+    void lapTimes_ThrowsException_IfInAbbreviationsDeletedTeam() throws ValidationDataException, ParseException {
         pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutTeam.txt";
 
         String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
