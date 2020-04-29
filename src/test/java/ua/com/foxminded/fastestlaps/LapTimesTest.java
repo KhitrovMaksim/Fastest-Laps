@@ -116,6 +116,14 @@ public class LapTimesTest {
         
         assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
+    
+    @Test
+    void lapTimes_ThrowsException_IfInAbbreviationsDeletedSecondDelimiter() throws ValidationDataException, ParseException {
+        pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutSecondDelimiter.txt";
+        String expected = "There is an error in the abbreviation in the abbreviations.txt file";
+        
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+    }
 
 
     @Test

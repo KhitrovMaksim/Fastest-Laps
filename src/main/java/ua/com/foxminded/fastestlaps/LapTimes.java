@@ -41,6 +41,8 @@ public class LapTimes {
 
         if (Boolean.FALSE.equals(validateAbbreviations(abbreviations))) {
             return "There is an error in the abbreviation in the abbreviations.txt file";
+        } else if (Boolean.FALSE.equals(validateSecondDelimiterInAbbreviations(abbreviations))) {
+            return "There is an error in the abbreviation in the abbreviations.txt file";
         }
 
         Map<String, String[]> abbreviationsWithIndents = new HashMap<>();
@@ -191,6 +193,20 @@ public class LapTimes {
             if (entry.getKey().length() != 3) {
                 return false;
             }
+        }
+        return true;
+    }
+    
+    private Boolean validateSecondDelimiterInAbbreviations (Map<String, String[]> abbreviations) {
+        String[] description;
+        
+        for (Map.Entry<String, String[]> entry : abbreviations.entrySet()) {
+            description = abbreviations.get(entry.getKey());
+
+            if (description.length < 3) {
+                return false;
+            }
+
         }
         return true;
     }
