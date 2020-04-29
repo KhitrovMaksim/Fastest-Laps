@@ -155,4 +155,11 @@ public class LapTimesTest {
         assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
     
+    @Test
+    void lapTimes_ShouldReturnErrorMessage_IfInLogsWrongTime() throws ValidationDataException, ParseException {
+        String expected = "Dates in end.log and start.log files do not match";
+        pathToTimeLogEnd = "src\\test\\resources\\endWithWrongTime.log";
+
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+    }
 }

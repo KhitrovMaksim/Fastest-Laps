@@ -3,6 +3,7 @@ package ua.com.foxminded.fastestlaps;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -19,13 +20,14 @@ public class LapTimes {
     public String showReport(String pathToTimeLogStart, String pathToTimeLogEnd, String pathToAbbreviations)
             throws ValidationDataException, ParseException {
         Boolean validateFilesLenght = validateFilesLenght(pathToTimeLogStart, pathToTimeLogEnd, pathToAbbreviations);
-
+        Boolean validateAbbreviationsInFiles = validateAbbreviationsInFiles(pathToTimeLogStart, pathToTimeLogEnd, pathToAbbreviations);
+        
         if (Boolean.FALSE.equals(validateFilesLenght)) {
             return "The number of lines in the files should be the same";
         } else if (Boolean.FALSE.equals(validateDates(pathToTimeLogStart, pathToTimeLogEnd))) {
             return "Dates in end.log and start.log files do not match";
         }
-        
+        ;
         Map<String, String> timeLogEnd = new HashMap<>();
         timeLogEnd = parseTimeLog(pathToTimeLogEnd);
 
@@ -43,12 +45,14 @@ public class LapTimes {
         Map<String, String[]> abbreviations = new HashMap<>();
         abbreviations = parseAbbreviations(pathToAbbreviations);
 
-        if (Boolean.FALSE.equals(validateAbbreviations(abbreviations))) {
+        if (Boolean.FALSE.equals(validateAbbreviationInAbbreviations(abbreviations))) {
             return "There is an error in the abbreviation in the abbreviations.txt file";
         } else if (Boolean.FALSE.equals(validateSecondDelimiterInAbbreviations(abbreviations))) {
             return "There is an error in the abbreviation in the abbreviations.txt file";
+        } else if (Boolean.FALSE.equals(validateAbbreviationsInFiles)) {
+            return "There is an error in the abbreviation in files";
         }
-
+        
         Map<String, String[]> abbreviationsWithIndents = new HashMap<>();
         abbreviationsWithIndents = composeIndentAbbreviations(abbreviations);
 
@@ -194,7 +198,7 @@ public class LapTimes {
         return true;
     }
 
-    private Boolean validateAbbreviations(Map<String, String[]> abbreviations) {
+    private Boolean validateAbbreviationInAbbreviations(Map<String, String[]> abbreviations) {
         for (Map.Entry<String, String[]> entry : abbreviations.entrySet()) {
             if (entry.getKey().length() != 3) {
                 return false;
@@ -202,10 +206,10 @@ public class LapTimes {
         }
         return true;
     }
-    
-    private Boolean validateSecondDelimiterInAbbreviations (Map<String, String[]> abbreviations) {
+
+    private Boolean validateSecondDelimiterInAbbreviations(Map<String, String[]> abbreviations) {
         String[] description;
-        
+
         for (Map.Entry<String, String[]> entry : abbreviations.entrySet()) {
             description = abbreviations.get(entry.getKey());
 
@@ -216,18 +220,21 @@ public class LapTimes {
         }
         return true;
     }
-    
+
     private Boolean validateDates(String pathToTimeLogStart, String pathToTimeLogEnd) throws ValidationDataException {
         List<String> startLog = new ArrayList<>();
         List<String> endLog = new ArrayList<>();
-    
+
         if (!fileReader.parseFile(pathToTimeLogStart).allMatch(line -> line.matches("(.*)\\d{4}-\\d{2}-\\d{2}(.*)"))) {
             return false;
-        } else if (!fileReader.parseFile(pathToTimeLogEnd).allMatch(line -> line.matches("(.*)\\d{4}-\\d{2}-\\d{2}(.*)"))) {
+        } else if (!fileReader.parseFile(pathToTimeLogEnd)
+                .allMatch(line -> line.matches("(.*)\\d{4}-\\d{2}-\\d{2}(.*)"))) {
             return false;
         } else {
-            startLog = fileReader.parseFile(pathToTimeLogStart).map(s -> s.replaceAll("[A-Z]|(_\\d{2}:\\d{2}:\\d{2}.\\d{3})", "")).collect(Collectors.toList());
-            endLog = fileReader.parseFile(pathToTimeLogEnd).map(s -> s.replaceAll("[A-Z]|(_\\d{2}:\\d{2}:\\d{2}.\\d{3})", "")).collect(Collectors.toList());
+            startLog = fileReader.parseFile(pathToTimeLogStart)
+                    .map(s -> s.replaceAll("[A-Z]|(_\\d{2}:\\d{2}:\\d{2}.\\d{3})", "")).collect(Collectors.toList());
+            endLog = fileReader.parseFile(pathToTimeLogEnd)
+                    .map(s -> s.replaceAll("[A-Z]|(_\\d{2}:\\d{2}:\\d{2}.\\d{3})", "")).collect(Collectors.toList());
             int i = 0;
             for (String line : startLog) {
                 if (line.equals(endLog.get(i))) {
@@ -238,6 +245,34 @@ public class LapTimes {
             }
         }
 
+        return true;
+    }
+
+    private Boolean validateAbbreviationsInFiles(String pathToTimeLogStart, String pathToTimeLogEnd,
+            String pathToAbbreviations) throws ValidationDataException {
+        List<String> abbreviationsFromStartLog = new ArrayList<>();
+        List<String> abbreviationsFromEndLog = new ArrayList<>();
+        List<String> abbreviationsFromTxt = new ArrayList<>();
+        
+        abbreviationsFromStartLog = fileReader.parseFile(pathToTimeLogStart)
+                .map(line -> line.replaceAll("(\\d{4}-\\d{2}-\\d{2})|(_\\d{2}:\\d{2}:\\d{2}.\\d{3})", "")).collect(Collectors.toList());
+        abbreviationsFromEndLog = fileReader.parseFile(pathToTimeLogEnd)
+                .map(line -> line.replaceAll("(\\d{4}-\\d{2}-\\d{2})|(_\\d{2}:\\d{2}:\\d{2}.\\d{3})", "")).collect(Collectors.toList());
+        abbreviationsFromTxt = fileReader.parseFile(pathToAbbreviations)
+                .map(line -> line.replaceAll("\\_.*$", "")).collect(Collectors.toList());
+        Collections.sort(abbreviationsFromStartLog);
+        Collections.sort(abbreviationsFromEndLog);
+        Collections.sort(abbreviationsFromTxt);
+        
+        int i = 0;
+        for (String line : abbreviationsFromTxt) {
+            if ((line.equals(abbreviationsFromStartLog.get(i))) && (line.equals(abbreviationsFromEndLog.get(i)))) {
+                i++;
+            } else {
+                return false;
+            }
+        }
+        
         return true;
     }
 }
