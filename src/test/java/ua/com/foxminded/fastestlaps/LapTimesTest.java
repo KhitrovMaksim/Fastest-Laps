@@ -99,7 +99,7 @@ public class LapTimesTest {
     }
     
     @Test
-    void lapTimes_ThrowsException_IfInStartLogDeletedDate() throws ValidationDataException, ParseException {
+    void lapTimes_ShouldReturnCertainString_IfInStartLogDeletedDate() throws ValidationDataException, ParseException {
         pathToTimeLogStart = "src\\test\\resources\\startWithoutDate.log";
 
         String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
@@ -110,7 +110,7 @@ public class LapTimesTest {
     }
     
     @Test
-    void lapTimes_ThrowsException_IfInAbbreviationsDeletedFirstDelimiter() throws ValidationDataException, ParseException {
+    void lapTimes_ShouldReturnErrorMessage_IfInAbbreviationsDeletedFirstDelimiter() throws ValidationDataException, ParseException {
         pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutFirstDelimiter.txt";
         String expected = "There is an error in the abbreviation in the abbreviations.txt file";
         
@@ -118,7 +118,7 @@ public class LapTimesTest {
     }
     
     @Test
-    void lapTimes_ThrowsException_IfInAbbreviationsDeletedSecondDelimiter() throws ValidationDataException, ParseException {
+    void lapTimes_ShouldReturnErrorMessage_IfInAbbreviationsDeletedSecondDelimiter() throws ValidationDataException, ParseException {
         pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutSecondDelimiter.txt";
         String expected = "There is an error in the abbreviation in the abbreviations.txt file";
         
@@ -156,6 +156,4 @@ public class LapTimesTest {
 
         assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
-
-
 }

@@ -67,7 +67,6 @@ public class FileReaderTest {
         }, message);
     }
 
-
     @Test
     void fileReader_ThrowsValidationExceptionWithMessage_IfInEndLogDeletedDelimiter() throws IOException, ParseException {
         String pathToTimeLogEnd = "src\\test\\resources\\endWithoutDelimiter.log";
@@ -88,7 +87,6 @@ public class FileReaderTest {
         }, message);
     }
     
-
     @Test
     void fileReader_ThrowsValidationExceptionWithMessage_IfInAbbreviationsDeletedTwoDelimiters() throws IOException, ParseException {
         String pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutTwoDelimiters.txt";
