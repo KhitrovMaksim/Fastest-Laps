@@ -2,9 +2,11 @@ package ua.com.foxminded.fastestlaps;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -20,19 +22,21 @@ public class LapTimes {
 
         if (Boolean.FALSE.equals(validateFilesLenght)) {
             return "The number of lines in the files should be the same";
+        } else if (Boolean.FALSE.equals(validateDates(pathToTimeLogStart, pathToTimeLogEnd))) {
+            return "Dates in end.log and start.log files do not match";
         }
-
+        
         Map<String, String> timeLogEnd = new HashMap<>();
         timeLogEnd = parseTimeLog(pathToTimeLogEnd);
 
-        if (Boolean.FALSE.equals(validateAbbreviation(timeLogEnd))) {
+        if (Boolean.FALSE.equals(validateTimeLog(timeLogEnd))) {
             return "There is an error in the abbreviation in the end.log file";
         }
 
         Map<String, String> timeLogStart = new HashMap<>();
         timeLogStart = parseTimeLog(pathToTimeLogStart);
 
-        if (Boolean.FALSE.equals(validateAbbreviation(timeLogStart))) {
+        if (Boolean.FALSE.equals(validateTimeLog(timeLogStart))) {
             return "There is an error in the abbreviation in the start.log file";
         }
 
@@ -179,9 +183,11 @@ public class LapTimes {
         return length;
     }
 
-    private Boolean validateAbbreviation(Map<String, String> timeLog) {
+    private Boolean validateTimeLog(Map<String, String> timeLog) {
         for (Map.Entry<String, String> entry : timeLog.entrySet()) {
             if (entry.getKey().length() != 3) {
+                return false;
+            } else if (!entry.getValue().matches("\\d{2}:\\d{2}:\\d{2}.\\d{3}")) {
                 return false;
             }
         }
@@ -208,6 +214,30 @@ public class LapTimes {
             }
 
         }
+        return true;
+    }
+    
+    private Boolean validateDates(String pathToTimeLogStart, String pathToTimeLogEnd) throws ValidationDataException {
+        List<String> startLog = new ArrayList<>();
+        List<String> endLog = new ArrayList<>();
+    
+        if (!fileReader.parseFile(pathToTimeLogStart).allMatch(line -> line.matches("(.*)\\d{4}-\\d{2}-\\d{2}(.*)"))) {
+            return false;
+        } else if (!fileReader.parseFile(pathToTimeLogEnd).allMatch(line -> line.matches("(.*)\\d{4}-\\d{2}-\\d{2}(.*)"))) {
+            return false;
+        } else {
+            startLog = fileReader.parseFile(pathToTimeLogStart).map(s -> s.replaceAll("[A-Z]|(_\\d{2}:\\d{2}:\\d{2}.\\d{3})", "")).collect(Collectors.toList());
+            endLog = fileReader.parseFile(pathToTimeLogEnd).map(s -> s.replaceAll("[A-Z]|(_\\d{2}:\\d{2}:\\d{2}.\\d{3})", "")).collect(Collectors.toList());
+            int i = 0;
+            for (String line : startLog) {
+                if (line.equals(endLog.get(i))) {
+                    i++;
+                } else {
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 }

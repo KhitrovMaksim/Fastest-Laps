@@ -1,9 +1,7 @@
 package ua.com.foxminded.fastestlaps;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
 import java.text.ParseException;
 
 import org.junit.jupiter.api.Test;
@@ -40,7 +38,7 @@ public class LapTimesTest {
     }
 
     @Test
-    void lapTimes_ShouldReturnCertainString_IfInputIsThreeTeam() throws IOException, ParseException, ValidationDataException {
+    void lapTimes_ShouldReturnCertainString_IfInputIsThreeTeam() throws ParseException, ValidationDataException {
 
         String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
                 + " 2. Romain Grosjean | HAAS FERRARI         | 01:12.930\n"
@@ -99,12 +97,9 @@ public class LapTimesTest {
     }
     
     @Test
-    void lapTimes_ShouldReturnCertainString_IfInStartLogDeletedDate() throws ValidationDataException, ParseException {
+    void lapTimes_ShouldReturnErrorMessage_IfInStartLogDeletedDate() throws ValidationDataException, ParseException {
+        String expected = "Dates in end.log and start.log files do not match";
         pathToTimeLogStart = "src\\test\\resources\\startWithoutDate.log";
-
-        String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
-                + " 2. Romain Grosjean | HAAS FERRARI         | 01:12.930\n"
-                + " 3. Marcus Ericsson | SAUBER FERRARI       | 01:13.265\n";
 
         assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
@@ -125,29 +120,8 @@ public class LapTimesTest {
         assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
 
-
     @Test
-    void lapTimes_ThrowsException_IfInEndLogDeletedTime() throws IOException, ParseException {
-        pathToTimeLogEnd = "src\\test\\resources\\endWithoutTime.log";
-
-        assertThrows(ParseException.class, () -> {
-            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-    }
-
-    @Test
-    void lapTimes_ShouldReturnCertainString_IfInEndLogDeletedDate() throws ValidationDataException, ParseException {
-        pathToTimeLogEnd = "src\\test\\resources\\endWithoutDate.log";
-
-        String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
-                + " 2. Romain Grosjean | HAAS FERRARI         | 01:12.930\n"
-                + " 3. Marcus Ericsson | SAUBER FERRARI       | 01:13.265\n";
-
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
-    }
-
-    @Test
-    void lapTimes_ShouldReturnCertainString_IfInaAbbreviationsDeletedDriver() throws ValidationDataException, ParseException {
+    void lapTimes_ShouldReturnCertainString_IfInaAbbreviationsriver() throws ValidationDataException, ParseException {
         pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutDriver.txt";
 
         String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
@@ -156,4 +130,29 @@ public class LapTimesTest {
 
         assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
+    
+    @Test
+    void lapTimes_ShouldReturnErrorMessage_IfInStartLogDeletedTime() throws ValidationDataException, ParseException {
+        String expected = "Dates in end.log and start.log files do not match";
+        pathToTimeLogStart = "src\\test\\resources\\startWithoutTime.log";
+
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+    }
+    
+    @Test
+    void lapTimes_ShouldReturnErrorMessage_IfInEndLogDeletedTime() throws ValidationDataException, ParseException {
+        String expected = "Dates in end.log and start.log files do not match";
+        pathToTimeLogEnd = "src\\test\\resources\\endWithoutTime.log";
+
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+    }
+    
+    @Test
+    void lapTimes_ShouldReturnErrorMessage_IfInLogsWrongDate() throws ValidationDataException, ParseException {
+        String expected = "Dates in end.log and start.log files do not match";
+        pathToTimeLogEnd = "src\\test\\resources\\endWithWrongDate.log";
+
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+    }
+    
 }
