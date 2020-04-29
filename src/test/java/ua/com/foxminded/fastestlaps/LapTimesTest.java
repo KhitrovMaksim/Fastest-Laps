@@ -50,23 +50,54 @@ public class LapTimesTest {
     }
 
     @Test
-    void lapTimes_ThrowsException_IfInStartLogDeletedTeam() throws IOException, ParseException {
+    void lapTimes_ShouldReturnErrorMessage_IfInStartLogDeletedTeam() throws ValidationDataException, ParseException {
+        String expected = "There is an error in the abbreviation in the start.log file";
         pathToTimeLogStart = "src\\test\\resources\\startWithoutTeam.log";
 
-        assertThrows(NullPointerException.class, () -> {
-            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+    }
+    
+    @Test
+    void lapTimes_ShouldReturnErrorMessage_IfInStartLogWrongAbbreviationLength() throws ValidationDataException, ParseException {
+        String expected = "There is an error in the abbreviation in the start.log file";
+        pathToTimeLogStart = "src\\test\\resources\\startWrongAbbreviationLength.log";
+
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
 
     @Test
-    void lapTimes_ThrowsException_IfInStartLogDeletedTime() throws IOException, ParseException {
-        pathToTimeLogStart = "src\\test\\resources\\startWithoutTime.log";
+    void lapTimes_ShouldReturnErrorMessage_IfInAbbreviationsDeletedAbbreviation() throws ValidationDataException, ParseException {
+        String expected = "There is an error in the abbreviation in the abbreviations.txt file";
+        pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutAbbreviation.txt";
 
-        assertThrows(ParseException.class, () -> {
-            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
 
+    
+    @Test
+    void lapTimes_ShouldReturnErrorMessage_IfInAbbreviationsWrongAbbreviationLength() throws ValidationDataException, ParseException {
+        String expected = "There is an error in the abbreviation in the abbreviations.txt file";
+        pathToabbreviations = "src\\test\\resources\\abbreviationsWrongAbbreviationLength.txt";
+
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+    }
+
+    @Test
+    void lapTimes_ShouldReturnErrorMessage_IfInEndLogDeletedTeam() throws ValidationDataException, ParseException {
+        String expected = "There is an error in the abbreviation in the end.log file";
+        pathToTimeLogEnd= "src\\test\\resources\\endWithoutTeam.log";
+
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+    }
+    
+    @Test
+    void lapTimes_ShouldReturnErrorMessage_IfInEndLogWrongAbbreviationLength() throws ValidationDataException, ParseException {
+        String expected = "There is an error in the abbreviation in the end.log file";
+        pathToTimeLogEnd = "src\\test\\resources\\endWrongAbbreviationLength.log";
+
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+    }
+    
     @Test
     void lapTimes_ThrowsException_IfInStartLogDeletedDate() throws ValidationDataException, ParseException {
         pathToTimeLogStart = "src\\test\\resources\\startWithoutDate.log";
@@ -77,24 +108,15 @@ public class LapTimesTest {
 
         assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
-
+    
     @Test
-    void lapTimes_ThrowsException_IfInStartLogDeletedDelimiter() throws IOException, ParseException {
-        pathToTimeLogStart = "src\\test\\resources\\startWithoutDelimiter.log";
-
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
-            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
+    void lapTimes_ThrowsException_IfInAbbreviationsDeletedFirstDelimiter() throws ValidationDataException, ParseException {
+        pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutFirstDelimiter.txt";
+        String expected = "There is an error in the abbreviation in the abbreviations.txt file";
+        
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
 
-    @Test
-    void lapTimes_ThrowsException_IfInEndLogDeletedTeam() throws IOException, ParseException {
-        pathToTimeLogEnd = "src\\test\\resources\\endWithoutTeam.log";
-
-        assertThrows(NullPointerException.class, () -> {
-            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-    }
 
     @Test
     void lapTimes_ThrowsException_IfInEndLogDeletedTime() throws IOException, ParseException {
@@ -106,7 +128,7 @@ public class LapTimesTest {
     }
 
     @Test
-    void lapTimes_ThrowsException_IfInEndLogDeletedDate() throws ValidationDataException, ParseException {
+    void lapTimes_ShouldReturnCertainString_IfInEndLogDeletedDate() throws ValidationDataException, ParseException {
         pathToTimeLogEnd = "src\\test\\resources\\endWithoutDate.log";
 
         String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
@@ -117,27 +139,7 @@ public class LapTimesTest {
     }
 
     @Test
-    void lapTimes_ThrowsException_IfInEndLogDeletedDelimiter() throws IOException, ParseException {
-        pathToTimeLogEnd = "src\\test\\resources\\endWithoutDelimiter.log";
-
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
-            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-    }
-
-    @Test
-    void lapTimes_ThrowsException_IfInAbbreviationsDeletedTeam() throws ValidationDataException, ParseException {
-        pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutTeam.txt";
-
-        String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
-                + " 2. Romain Grosjean | HAAS FERRARI         | 01:12.930\n"
-                + " 3. Marcus Ericsson |                      | 01:13.265\n";
-
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
-    }
-
-    @Test
-    void lapTimes_ThrowsException_IfInaAbbreviationsDeletedDriver() throws ValidationDataException, ParseException {
+    void lapTimes_ShouldReturnCertainString_IfInaAbbreviationsDeletedDriver() throws ValidationDataException, ParseException {
         pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutDriver.txt";
 
         String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
@@ -147,21 +149,5 @@ public class LapTimesTest {
         assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
 
-    @Test
-    void lapTimes_ThrowsException_IfInaAbbreviationsDeletedAbbreviation() throws IOException, ParseException {
-        pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutAbbreviation.txt";
 
-        assertThrows(NullPointerException.class, () -> {
-            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-    }
-
-    @Test
-    void lapTimes_ThrowsException_IfInAbbreviationsDeletedDelimiter() throws IOException, ParseException {
-        pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutDelimiter.txt";
-
-        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
-            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-    }
 }

@@ -21,16 +21,28 @@ public class LapTimes {
         if (Boolean.FALSE.equals(validateFilesLenght)) {
             return "The number of lines in the files should be the same";
         }
-        
+
         Map<String, String> timeLogEnd = new HashMap<>();
         timeLogEnd = parseTimeLog(pathToTimeLogEnd);
-        
+
+        if (Boolean.FALSE.equals(validateAbbreviation(timeLogEnd))) {
+            return "There is an error in the abbreviation in the end.log file";
+        }
+
         Map<String, String> timeLogStart = new HashMap<>();
         timeLogStart = parseTimeLog(pathToTimeLogStart);
 
+        if (Boolean.FALSE.equals(validateAbbreviation(timeLogStart))) {
+            return "There is an error in the abbreviation in the start.log file";
+        }
+
         Map<String, String[]> abbreviations = new HashMap<>();
         abbreviations = parseAbbreviations(pathToAbbreviations);
-        
+
+        if (Boolean.FALSE.equals(validateAbbreviations(abbreviations))) {
+            return "There is an error in the abbreviation in the abbreviations.txt file";
+        }
+
         Map<String, String[]> abbreviationsWithIndents = new HashMap<>();
         abbreviationsWithIndents = composeIndentAbbreviations(abbreviations);
 
@@ -39,7 +51,7 @@ public class LapTimes {
 
         return composeResult(abbreviationsWithIndents, lapTime);
     }
-    
+
     private Boolean validateFilesLenght(String pathToTimeLogStart, String pathToTimeLogEnd, String pathToAbbreviations)
             throws ValidationDataException {
         int startLogLength = (int) fileReader.parseFile(pathToTimeLogStart).count();
@@ -165,4 +177,21 @@ public class LapTimes {
         return length;
     }
 
+    private Boolean validateAbbreviation(Map<String, String> timeLog) {
+        for (Map.Entry<String, String> entry : timeLog.entrySet()) {
+            if (entry.getKey().length() != 3) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Boolean validateAbbreviations(Map<String, String[]> abbreviations) {
+        for (Map.Entry<String, String[]> entry : abbreviations.entrySet()) {
+            if (entry.getKey().length() != 3) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
