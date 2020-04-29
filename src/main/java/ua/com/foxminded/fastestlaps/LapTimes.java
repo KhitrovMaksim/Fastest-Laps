@@ -20,7 +20,6 @@ public class LapTimes {
     public String showReport(String pathToTimeLogStart, String pathToTimeLogEnd, String pathToAbbreviations)
             throws ValidationDataException, ParseException {
         Boolean validateFilesLenght = validateFilesLenght(pathToTimeLogStart, pathToTimeLogEnd, pathToAbbreviations);
-        Boolean validateAbbreviationsInFiles = validateAbbreviationsInFiles(pathToTimeLogStart, pathToTimeLogEnd, pathToAbbreviations);
         
         if (Boolean.FALSE.equals(validateFilesLenght)) {
             return "The number of lines in the files should be the same";
@@ -44,7 +43,9 @@ public class LapTimes {
 
         Map<String, String[]> abbreviations = new HashMap<>();
         abbreviations = parseAbbreviations(pathToAbbreviations);
-
+        
+        Boolean validateAbbreviationsInFiles = validateAbbreviationsInFiles(pathToTimeLogStart, pathToTimeLogEnd, pathToAbbreviations);
+        
         if (Boolean.FALSE.equals(validateAbbreviationInAbbreviations(abbreviations))) {
             return "There is an error in the abbreviation in the abbreviations.txt file";
         } else if (Boolean.FALSE.equals(validateSecondDelimiterInAbbreviations(abbreviations))) {

@@ -16,7 +16,7 @@ public class LapTimesTest {
     @Test
     void lapTimes_ExpectedMessageAboutLength_IfStartLogWitoutLine() throws ValidationDataException, ParseException {
         String expected = "The number of lines in the files should be the same";
-        pathToTimeLogEnd = "src\\test\\resources\\startWithoutLine.log";
+        pathToTimeLogStart = "src\\test\\resources\\startWithoutLine.log";
 
         assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
@@ -159,6 +159,30 @@ public class LapTimesTest {
     void lapTimes_ShouldReturnErrorMessage_IfInLogsWrongTime() throws ValidationDataException, ParseException {
         String expected = "Dates in end.log and start.log files do not match";
         pathToTimeLogEnd = "src\\test\\resources\\endWithWrongTime.log";
+
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+    }
+    
+    @Test
+    void lapTimes_ShouldReturnErrorMessage_IfInEndLogWrongAbbreviation() throws ValidationDataException, ParseException {
+        String expected = "There is an error in the abbreviation in files";
+        pathToTimeLogEnd = "src\\test\\resources\\endWithWrongAbbreviation.log";
+
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+    }
+    
+    @Test
+    void lapTimes_ShouldReturnErrorMessage_IfInStartLogWrongAbbreviation() throws ValidationDataException, ParseException {
+        String expected = "There is an error in the abbreviation in files";
+        pathToTimeLogStart = "src\\test\\resources\\startWithWrongAbbreviation.log";
+
+        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+    }
+    
+    @Test
+    void lapTimes_ShouldReturnErrorMessage_IfInAbbreviationsWrongAbbreviation() throws ValidationDataException, ParseException {
+        String expected = "There is an error in the abbreviation in files";
+        pathToabbreviations = "src\\test\\resources\\abbreviationsWithWrongAbbreviation.txt";
 
         assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
