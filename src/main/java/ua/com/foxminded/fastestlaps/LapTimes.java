@@ -20,7 +20,7 @@ public class LapTimes {
     public String showReport(String pathToTimeLogStart, String pathToTimeLogEnd, String pathToAbbreviations)
             throws ValidationDataException, ParseException {
         Boolean validateFilesLenght = validateFilesLenght(pathToTimeLogStart, pathToTimeLogEnd, pathToAbbreviations);
-        
+
         if (Boolean.FALSE.equals(validateFilesLenght)) {
             return "The number of lines in the files should be the same";
         } else if (Boolean.FALSE.equals(validateDates(pathToTimeLogStart, pathToTimeLogEnd))) {
@@ -43,9 +43,10 @@ public class LapTimes {
 
         Map<String, String[]> abbreviations = new HashMap<>();
         abbreviations = parseAbbreviations(pathToAbbreviations);
-        
-        Boolean validateAbbreviationsInFiles = validateAbbreviationsInFiles(pathToTimeLogStart, pathToTimeLogEnd, pathToAbbreviations);
-        
+
+        Boolean validateAbbreviationsInFiles = validateAbbreviationsInFiles(pathToTimeLogStart, pathToTimeLogEnd,
+                pathToAbbreviations);
+
         if (Boolean.FALSE.equals(validateAbbreviationInAbbreviations(abbreviations))) {
             return "There is an error in the abbreviation in the abbreviations.txt file";
         } else if (Boolean.FALSE.equals(validateSecondDelimiterInAbbreviations(abbreviations))) {
@@ -53,7 +54,7 @@ public class LapTimes {
         } else if (Boolean.FALSE.equals(validateAbbreviationsInFiles)) {
             return "There is an error in the abbreviation in files";
         }
-        
+
         Map<String, String[]> abbreviationsWithIndents = new HashMap<>();
         abbreviationsWithIndents = composeIndentAbbreviations(abbreviations);
 
@@ -254,17 +255,19 @@ public class LapTimes {
         List<String> abbreviationsFromStartLog = new ArrayList<>();
         List<String> abbreviationsFromEndLog = new ArrayList<>();
         List<String> abbreviationsFromTxt = new ArrayList<>();
-        
+
         abbreviationsFromStartLog = fileReader.parseFile(pathToTimeLogStart)
-                .map(line -> line.replaceAll("(\\d{4}-\\d{2}-\\d{2})|(_\\d{2}:\\d{2}:\\d{2}.\\d{3})", "")).collect(Collectors.toList());
+                .map(line -> line.replaceAll("(\\d{4}-\\d{2}-\\d{2})|(_\\d{2}:\\d{2}:\\d{2}.\\d{3})", ""))
+                .collect(Collectors.toList());
         abbreviationsFromEndLog = fileReader.parseFile(pathToTimeLogEnd)
-                .map(line -> line.replaceAll("(\\d{4}-\\d{2}-\\d{2})|(_\\d{2}:\\d{2}:\\d{2}.\\d{3})", "")).collect(Collectors.toList());
-        abbreviationsFromTxt = fileReader.parseFile(pathToAbbreviations)
-                .map(line -> line.replaceAll("\\_.*$", "")).collect(Collectors.toList());
+                .map(line -> line.replaceAll("(\\d{4}-\\d{2}-\\d{2})|(_\\d{2}:\\d{2}:\\d{2}.\\d{3})", ""))
+                .collect(Collectors.toList());
+        abbreviationsFromTxt = fileReader.parseFile(pathToAbbreviations).map(line -> line.replaceAll("\\_.*$", ""))
+                .collect(Collectors.toList());
         Collections.sort(abbreviationsFromStartLog);
         Collections.sort(abbreviationsFromEndLog);
         Collections.sort(abbreviationsFromTxt);
-        
+
         int i = 0;
         for (String line : abbreviationsFromTxt) {
             if ((line.equals(abbreviationsFromStartLog.get(i))) && (line.equals(abbreviationsFromEndLog.get(i)))) {
@@ -273,7 +276,7 @@ public class LapTimes {
                 return false;
             }
         }
-        
+
         return true;
     }
 }

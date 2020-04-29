@@ -41,8 +41,8 @@ public class LapTimesTest {
     void lapTimes_ShouldReturnCertainString_IfInputIsThreeTeam() throws ParseException, ValidationDataException {
 
         String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
-                + " 2. Romain Grosjean | HAAS FERRARI         | 01:12.930\n"
-                + " 3. Marcus Ericsson | SAUBER FERRARI       | 01:13.265\n";
+                        + " 2. Romain Grosjean | HAAS FERRARI         | 01:12.930\n"
+                        + " 3. Marcus Ericsson | SAUBER FERRARI       | 01:13.265\n";
 
         assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
@@ -125,8 +125,8 @@ public class LapTimesTest {
         pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutDriver.txt";
 
         String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
-                + " 2. Romain Grosjean | HAAS FERRARI         | 01:12.930\n"
-                + " 3.                 | SAUBER FERRARI       | 01:13.265\n";
+                        + " 2. Romain Grosjean | HAAS FERRARI         | 01:12.930\n"
+                        + " 3.                 | SAUBER FERRARI       | 01:13.265\n";
 
         assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }

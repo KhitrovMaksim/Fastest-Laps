@@ -7,13 +7,13 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public class FileReader {
-    
+
     public Stream<String> parseFile(String fileName) throws ValidationDataException {
         try {
-            if (Files.lines(Paths.get(fileName)).filter("" ::equals).count() >= 1) {
-                throw new ValidationDataException("Blank line in "  + fileName);
+            if (Files.lines(Paths.get(fileName)).filter(""::equals).count() >= 1) {
+                throw new ValidationDataException("Blank line in " + fileName);
             } else if (!Files.lines(Paths.get(fileName)).allMatch(line -> line.matches("(.*)_(.*)"))) {
-                throw new ValidationDataException("Missing delimiter in "  + fileName);
+                throw new ValidationDataException("Missing delimiter in " + fileName);
             } else {
                 return Files.lines(Paths.get(fileName));
             }
