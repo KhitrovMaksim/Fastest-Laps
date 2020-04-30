@@ -6,6 +6,8 @@ import java.text.ParseException;
 
 import org.junit.jupiter.api.Test;
 
+import ua.com.foxminded.fastestlaps.service.LapTimes;
+
 public class LapTimesTest {
 
     LapTimes lapTimes = new LapTimes();

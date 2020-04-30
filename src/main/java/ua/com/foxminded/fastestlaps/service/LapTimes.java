@@ -1,4 +1,4 @@
-package ua.com.foxminded.fastestlaps;
+package ua.com.foxminded.fastestlaps.service;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import ua.com.foxminded.fastestlaps.exception.ValidationDataException;
-import ua.com.foxminded.fastestlaps.service.FileReader;
 
 public class LapTimes {
     private static String INDENT = " ";

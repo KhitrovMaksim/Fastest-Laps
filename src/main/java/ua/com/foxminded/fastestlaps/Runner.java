@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 
 import ua.com.foxminded.fastestlaps.exception.ValidationDataException;
+import ua.com.foxminded.fastestlaps.service.LapTimes;
 
 public class Runner {
 
