@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import ua.com.foxminded.fastestlaps.exception.ValidationDataException;
 import ua.com.foxminded.fastestlaps.service.FileReader;
 
 public class LapTimes {
@@ -29,7 +30,7 @@ public class LapTimes {
         } else if (Boolean.FALSE.equals(validateDates(pathToTimeLogStart, pathToTimeLogEnd))) {
             return "Dates in end.log and start.log files do not match";
         }
-        ;
+        
         Map<String, String> timeLogEnd = new HashMap<>();
         timeLogEnd = parseTimeLog(pathToTimeLogEnd);
 

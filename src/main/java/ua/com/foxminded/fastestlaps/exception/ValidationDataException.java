@@ -1,4 +1,4 @@
-package ua.com.foxminded.fastestlaps;
+package ua.com.foxminded.fastestlaps.exception;
 
 public class ValidationDataException extends RuntimeException {
 

@@ -3,6 +3,8 @@ package ua.com.foxminded.fastestlaps;
 import java.io.IOException;
 import java.text.ParseException;
 
+import ua.com.foxminded.fastestlaps.exception.ValidationDataException;
+
 public class Runner {
 
     public static void main(String[] args) throws ValidationDataException, ParseException, IOException {

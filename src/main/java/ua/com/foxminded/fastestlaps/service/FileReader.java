@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.util.stream.Stream;
 
-import ua.com.foxminded.fastestlaps.ValidationDataException;
+import ua.com.foxminded.fastestlaps.exception.ValidationDataException;
 
 public class FileReader {
 

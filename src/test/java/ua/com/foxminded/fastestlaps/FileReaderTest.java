@@ -7,6 +7,7 @@ import java.text.ParseException;
 
 import org.junit.jupiter.api.Test;
 
+import ua.com.foxminded.fastestlaps.exception.ValidationDataException;
 import ua.com.foxminded.fastestlaps.service.FileReader;
 
 public class FileReaderTest {
