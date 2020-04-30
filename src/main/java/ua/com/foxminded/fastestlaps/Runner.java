@@ -3,14 +3,12 @@ package ua.com.foxminded.fastestlaps;
 import java.io.IOException;
 import java.text.ParseException;
 
-import ua.com.foxminded.fastestlaps.exception.ValidationDataException;
 import ua.com.foxminded.fastestlaps.service.LapTimes;
 
 public class Runner {
 
-    public static void main(String[] args) throws ValidationDataException, ParseException, IOException {
+    public static void main(String[] args) throws ParseException, IOException {
 
-        
         String pathToTimeLogStart = "start.log";
         String pathToTimeLogEnd = "end.log";
         String pathToAbbreviations = "abbreviations.txt";
