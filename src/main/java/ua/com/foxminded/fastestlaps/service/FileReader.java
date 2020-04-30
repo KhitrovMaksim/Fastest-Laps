@@ -10,8 +10,14 @@ import ua.com.foxminded.fastestlaps.exception.ValidationDataException;
 
 public class FileReader {
 
-    public Stream<String> parseFile(String fileName) throws ValidationDataException {
-        String pathToFile = getClass().getClassLoader().getResource(fileName).getPath();
+    public Stream<String> parseFile(String fileName) {
+        String pathToFile;
+        
+        try {
+            pathToFile = getClass().getClassLoader().getResource(fileName).getPath();
+        } catch (NullPointerException e) {
+            throw new ValidationDataException("No such file " + fileName);
+        }
         
         try {
             if (Files.lines(new File(pathToFile).toPath()).filter(""::equals).count() >= 1) {
