@@ -1,5 +1,6 @@
 package ua.com.foxminded.fastestlaps;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import ua.com.foxminded.fastestlaps.service.FileReader;
+
 public class LapTimes {
     private static String INDENT = " ";
     private static String DASH = "-";
@@ -18,7 +21,7 @@ public class LapTimes {
     private FileReader fileReader = new FileReader();
 
     public String showReport(String pathToTimeLogStart, String pathToTimeLogEnd, String pathToAbbreviations)
-            throws ValidationDataException, ParseException {
+            throws ValidationDataException, ParseException, IOException {
         Boolean validateFilesLenght = validateFilesLenght(pathToTimeLogStart, pathToTimeLogEnd, pathToAbbreviations);
 
         if (Boolean.FALSE.equals(validateFilesLenght)) {
@@ -46,12 +49,14 @@ public class LapTimes {
 
         Boolean validateAbbreviationsInFiles = validateAbbreviationsInFiles(pathToTimeLogStart, pathToTimeLogEnd,
                 pathToAbbreviations);
+        validateAbbreviationInAbbreviations(abbreviations);
+        
 
-        if (Boolean.FALSE.equals(validateAbbreviationInAbbreviations(abbreviations))) {
+        if (Boolean.FALSE.equals(validateSecondDelimiterInAbbreviations(abbreviations))) {
             return "There is an error in the abbreviation in the abbreviations.txt file";
-        } else if (Boolean.FALSE.equals(validateSecondDelimiterInAbbreviations(abbreviations))) {
-            return "There is an error in the abbreviation in the abbreviations.txt file";
-        } else if (Boolean.FALSE.equals(validateAbbreviationsInFiles)) {
+        }
+        
+        if (Boolean.FALSE.equals(validateAbbreviationsInFiles)) {
             return "There is an error in the abbreviation in files";
         }
 
@@ -65,7 +70,7 @@ public class LapTimes {
     }
 
     private Boolean validateFilesLenght(String pathToTimeLogStart, String pathToTimeLogEnd, String pathToAbbreviations)
-            throws ValidationDataException {
+            throws ValidationDataException, IOException {
         int startLogLength = (int) fileReader.parseFile(pathToTimeLogStart).count();
         int endLogLength = (int) fileReader.parseFile(pathToTimeLogEnd).count();
         int abbreviationsLength = (int) fileReader.parseFile(pathToAbbreviations).count();
@@ -77,13 +82,13 @@ public class LapTimes {
         }
     }
 
-    private Map<String, String> parseTimeLog(String fileName) throws ValidationDataException {
+    private Map<String, String> parseTimeLog(String fileName) throws ValidationDataException, IOException {
 
         return fileReader.parseFile(fileName).map(s -> s.replaceAll("\\d{4}-\\d{2}-\\d{2}", ""))
                 .map(s -> s.split("_", 2)).collect(Collectors.toMap(a -> a[0], a -> a[1]));
     }
 
-    private Map<String, String[]> parseAbbreviations(String fileName) throws ValidationDataException {
+    private Map<String, String[]> parseAbbreviations(String fileName) throws ValidationDataException, IOException {
 
         return fileReader.parseFile(fileName).map(s -> s.split("_", 3)).collect(Collectors.toMap(a -> a[0], a -> a));
     }
@@ -200,13 +205,15 @@ public class LapTimes {
         return true;
     }
 
-    private Boolean validateAbbreviationInAbbreviations(Map<String, String[]> abbreviations) {
+    private void validateAbbreviationInAbbreviations(Map<String, String[]> abbreviations) throws ValidationDataException {
         for (Map.Entry<String, String[]> entry : abbreviations.entrySet()) {
             if (entry.getKey().length() != 3) {
-                return false;
+                throw new ValidationDataException(
+                        "There is an error in the abbreviation in the abbreviations.txt file");
+
             }
         }
-        return true;
+
     }
 
     private Boolean validateSecondDelimiterInAbbreviations(Map<String, String[]> abbreviations) {
@@ -223,7 +230,7 @@ public class LapTimes {
         return true;
     }
 
-    private Boolean validateDates(String pathToTimeLogStart, String pathToTimeLogEnd) throws ValidationDataException {
+    private Boolean validateDates(String pathToTimeLogStart, String pathToTimeLogEnd) throws ValidationDataException, IOException {
         List<String> startLog = new ArrayList<>();
         List<String> endLog = new ArrayList<>();
 
@@ -251,7 +258,7 @@ public class LapTimes {
     }
 
     private Boolean validateAbbreviationsInFiles(String pathToTimeLogStart, String pathToTimeLogEnd,
-            String pathToAbbreviations) throws ValidationDataException {
+            String pathToAbbreviations) throws ValidationDataException, IOException {
         List<String> abbreviationsFromStartLog = new ArrayList<>();
         List<String> abbreviationsFromEndLog = new ArrayList<>();
         List<String> abbreviationsFromTxt = new ArrayList<>();

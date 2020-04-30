@@ -7,6 +7,8 @@ import java.text.ParseException;
 
 import org.junit.jupiter.api.Test;
 
+import ua.com.foxminded.fastestlaps.service.FileReader;
+
 public class FileReaderTest {
     FileReader fileReader = new FileReader();
     
