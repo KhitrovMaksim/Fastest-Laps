@@ -1,192 +1,270 @@
 package ua.com.foxminded.fastestlaps;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.ParseException;
 
 import org.junit.jupiter.api.Test;
 
+import ua.com.foxminded.fastestlaps.exception.ValidationDataException;
 import ua.com.foxminded.fastestlaps.service.LapTimes;
 
 public class LapTimesTest {
 
     LapTimes lapTimes = new LapTimes();
-    String pathToTimeLogStart = "src\\test\\resources\\start.log";
-    String pathToTimeLogEnd = "src\\test\\resources\\end.log";
-    String pathToabbreviations = "src\\test\\resources\\abbreviations.txt";
- /*   
-    @Test
-    void lapTimes_ExpectedMessageAboutLength_IfStartLogWitoutLine() throws ValidationDataException, ParseException {
-        String expected = "The number of lines in the files should be the same";
-        pathToTimeLogStart = "src\\test\\resources\\startWithoutLine.log";
+    String pathToTimeLogStart = "start.log";
+    String pathToTimeLogEnd = "end.log";
+    String pathToabbreviations = "abbreviations.txt";
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
-    }
-    
     @Test
-    void lapTimes_ExpectedMessageAboutLength_IfEndLogWitoutLine() throws ValidationDataException, ParseException {
-        String expected = "The number of lines in the files should be the same";
-        pathToTimeLogEnd = "src\\test\\resources\\endWithoutLine.log";
+    void lapTimes_ExpectedTheSameMessageAboutAmountOfLines_IfStartLogWitoutLine() {
+        String errorMessage = "The number of lines in all files should be the same";
+        pathToTimeLogStart = "startWithoutLine.log";
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
 
     @Test
-    void lapTimes_ExpectedMessageAboutLength_IfAbbreviationsWithoutLine() throws ValidationDataException, ParseException {
-        String expected = "The number of lines in the files should be the same";
-        pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutLine.txt";
+    void lapTimes_ExpectedTheSameMessageAboutAmountOfLines_IfEndLogWitoutLine() {
+        String errorMessage = "The number of lines in all files should be the same";
+        pathToTimeLogEnd = "endWithoutLine.log";
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
 
     @Test
-    void lapTimes_ShouldReturnCertainString_IfInputIsThreeTeam() throws ParseException, ValidationDataException {
+    void lapTimes_ExpectedTheSameMessageAboutAmountOfLines_IfAbbreviationsWithoutLine() {
+        String errorMessage = "The number of lines in all files should be the same";
+        pathToabbreviations = "abbreviationsWithoutLine.txt";
+
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
+    }
+
+    @Test
+    void lapTimes_ShouldReturnCertainString_IfInputIsThreeTeam() throws ParseException {
 
         String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
-                        + " 2. Romain Grosjean | HAAS FERRARI         | 01:12.930\n"
-                        + " 3. Marcus Ericsson | SAUBER FERRARI       | 01:13.265\n";
+                + " 2. Romain Grosjean | HAAS FERRARI         | 01:12.930\n"
+                + " 3. Marcus Ericsson | SAUBER FERRARI       | 01:13.265\n";
 
         assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
 
     @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInStartLogDeletedTeam() throws ValidationDataException, ParseException {
-        String expected = "There is an error in the abbreviation in the start.log file";
-        pathToTimeLogStart = "src\\test\\resources\\startWithoutTeam.log";
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInStartLogDeletedTeam() {
+        String errorMessage = "There is an error in the abbreviation in the log file";
+        pathToTimeLogStart = "startWithoutTeam.log";
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
-    }
-    
-    @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInStartLogWrongAbbreviationLength() throws ValidationDataException, ParseException {
-        String expected = "There is an error in the abbreviation in the start.log file";
-        pathToTimeLogStart = "src\\test\\resources\\startWrongAbbreviationLength.log";
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
 
     @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInAbbreviationsDeletedAbbreviation() throws ValidationDataException, ParseException {
-        String expected = "There is an error in the abbreviation in the abbreviations.txt file";
-        pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutAbbreviation.txt";
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInStartLogWrongAbbreviationLength() {
+        String errorMessage = "There is an error in the abbreviation in the log file";
+        pathToTimeLogStart = "startWrongAbbreviationLength.log";
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
-    }
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
 
-    
-    @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInAbbreviationsWrongAbbreviationLength() throws ValidationDataException, ParseException {
-        String expected = "There is an error in the abbreviation in the abbreviations.txt file";
-        pathToabbreviations = "src\\test\\resources\\abbreviationsWrongAbbreviationLength.txt";
-
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
 
     @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInEndLogDeletedTeam() throws ValidationDataException, ParseException {
-        String expected = "There is an error in the abbreviation in the end.log file";
-        pathToTimeLogEnd= "src\\test\\resources\\endWithoutTeam.log";
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInAbbreviationsDeletedAbbreviation() {
+        String errorMessage = "There is an error in the abbreviation in the abbreviations.txt file";
+        pathToabbreviations = "abbreviationsWithoutAbbreviation.txt";
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
-    }
-    
-    @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInEndLogWrongAbbreviationLength() throws ValidationDataException, ParseException {
-        String expected = "There is an error in the abbreviation in the end.log file";
-        pathToTimeLogEnd = "src\\test\\resources\\endWrongAbbreviationLength.log";
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
-    
-    @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInStartLogDeletedDate() throws ValidationDataException, ParseException {
-        String expected = "Dates in end.log and start.log files do not match";
-        pathToTimeLogStart = "src\\test\\resources\\startWithoutDate.log";
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
-    }
-    
     @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInAbbreviationsDeletedFirstDelimiter() throws ValidationDataException, ParseException {
-        pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutFirstDelimiter.txt";
-        String expected = "There is an error in the abbreviation in the abbreviations.txt file";
-        
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInAbbreviationsWrongAbbreviationLength() {
+        String errorMessage = "There is an error in the abbreviation in the abbreviations.txt file";
+        pathToabbreviations = "abbreviationsWrongAbbreviationLength.txt";
+
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
-    
+
     @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInAbbreviationsDeletedSecondDelimiter() throws ValidationDataException, ParseException {
-        pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutSecondDelimiter.txt";
-        String expected = "There is an error in the abbreviation in the abbreviations.txt file";
-        
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInEndLogDeletedTeam() {
+        String errorMessage = "There is an error in the abbreviation in the log file";
+        pathToTimeLogEnd = "endWithoutTeam.log";
+
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
+    }
+
+    @Test
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInEndLogWrongAbbreviationLength() {
+        String errorMessage = "There is an error in the abbreviation in the log file";
+        pathToTimeLogEnd = "endWrongAbbreviationLength.log";
+
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
+    }
+
+    @Test
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInStartLogDeletedDate() {
+        String errorMessage = "Dates in end.log and start.log files do not match";
+        pathToTimeLogStart = "startWithoutDate.log";
+
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
+    }
+
+    @Test
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInAbbreviationsDeletedFirstDelimiter() {
+        String errorMessage = "There is an error in the abbreviation in the abbreviations.txt file";
+        pathToabbreviations = "abbreviationsWithoutFirstDelimiter.txt";
+
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
+    }
+
+    @Test
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInAbbreviationsDeletedSecondDelimiter()
+            throws ValidationDataException, ParseException {
+        String errorMessage = "Missing second delimiter in the abbreviations.txt file";
+        pathToabbreviations = "abbreviationsWithoutSecondDelimiter.txt";
+
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
 
     @Test
     void lapTimes_ShouldReturnCertainString_IfInaAbbreviationsriver() throws ValidationDataException, ParseException {
-        pathToabbreviations = "src\\test\\resources\\abbreviationsWithoutDriver.txt";
+        pathToabbreviations = "abbreviationsWithoutDriver.txt";
 
         String expected = " 1. Sergio Perez    | FORCE INDIA MERCEDES | 01:12.848\n"
-                        + " 2. Romain Grosjean | HAAS FERRARI         | 01:12.930\n"
-                        + " 3.                 | SAUBER FERRARI       | 01:13.265\n";
+                + " 2. Romain Grosjean | HAAS FERRARI         | 01:12.930\n"
+                + " 3.                 | SAUBER FERRARI       | 01:13.265\n";
 
         assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
     }
-    
+
     @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInStartLogDeletedTime() throws ValidationDataException, ParseException {
-        String expected = "Dates in end.log and start.log files do not match";
-        pathToTimeLogStart = "src\\test\\resources\\startWithoutTime.log";
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInStartLogDeletedTime() {
+        String errorMessage = "Dates in end.log and start.log files do not match";
+        pathToTimeLogStart = "startWithoutTime.log";
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
-    
+
     @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInEndLogDeletedTime() throws ValidationDataException, ParseException {
-        String expected = "Dates in end.log and start.log files do not match";
-        pathToTimeLogEnd = "src\\test\\resources\\endWithoutTime.log";
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInEndLogDeletedTime() {
+        String errorMessage = "Dates in end.log and start.log files do not match";
+        pathToTimeLogEnd = "endWithoutTime.log";
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
-    
+
     @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInLogsWrongDate() throws ValidationDataException, ParseException {
-        String expected = "Dates in end.log and start.log files do not match";
-        pathToTimeLogEnd = "src\\test\\resources\\endWithWrongDate.log";
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInLogsWrongDate() {
+        String errorMessage = "Dates in end.log and start.log files do not match";
+        pathToTimeLogEnd = "endWithWrongDate.log";
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
-    
+
     @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInLogsWrongTime() throws ValidationDataException, ParseException {
-        String expected = "Dates in end.log and start.log files do not match";
-        pathToTimeLogEnd = "src\\test\\resources\\endWithWrongTime.log";
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInLogsWrongTime() {
+        String errorMessage = "Dates in end.log and start.log files do not match";
+        pathToTimeLogEnd = "endWithWrongTime.log";
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
-    
+
     @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInEndLogWrongAbbreviation() throws ValidationDataException, ParseException {
-        String expected = "There is an error in the abbreviation in files";
-        pathToTimeLogEnd = "src\\test\\resources\\endWithWrongAbbreviation.log";
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInEndLogWrongAbbreviation() {
+        String errorMessage = "There is an error in the abbreviation in files";
+        pathToTimeLogEnd = "endWithWrongAbbreviation.log";
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
-    
+
     @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInStartLogWrongAbbreviation() throws ValidationDataException, ParseException {
-        String expected = "There is an error in the abbreviation in files";
-        pathToTimeLogStart = "src\\test\\resources\\startWithWrongAbbreviation.log";
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInStartLogWrongAbbreviation() {
+        String errorMessage = "There is an error in the abbreviation in files";
+        pathToTimeLogStart = "startWithWrongAbbreviation.log";
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
-    
+
     @Test
-    void lapTimes_ShouldReturnErrorMessage_IfInAbbreviationsWrongAbbreviation() throws ValidationDataException, ParseException {
-        String expected = "There is an error in the abbreviation in files";
-        pathToabbreviations = "src\\test\\resources\\abbreviationsWithWrongAbbreviation.txt";
+    void lapTimes_ShouldReturnTheSameErrorMessage_IfInAbbreviationsWrongAbbreviation() {
+        String errorMessage = "There is an error in the abbreviation in files";
+        pathToabbreviations = "abbreviationsWithWrongAbbreviation.txt";
 
-        assertEquals(expected, lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations));
+        Exception exception = assertThrows(ValidationDataException.class, () -> {
+            lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
+        });
+
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
-    */
 }

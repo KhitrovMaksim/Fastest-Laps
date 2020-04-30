@@ -14,7 +14,5 @@ public class Runner {
         LapTimes lapTimes = new LapTimes();
 
         System.out.println(lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToAbbreviations));
-
     }
-
 }

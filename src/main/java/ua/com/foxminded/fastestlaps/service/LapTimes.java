@@ -160,11 +160,11 @@ public class LapTimes {
         validateFilesLenght(startLines.get(), endLines.get(), abbreviationsLines.get());
         validateDatesInLogFile(startLines.get());
         validateDatesInLogFile(endLines.get());
+        validateDatesInLogs(startLines.get(), endLines.get());
         validateTimeLogAbbreviationLength(startLines.get());
         validateTimeLogAbbreviationLength(endLines.get());
         validateTimeLogDates(startLines.get());
         validateTimeLogDates(endLines.get());
-        validateDatesInLogs(startLines.get(), endLines.get());
         validateAbbreviationInAbbreviations(abbreviationsLines.get());
         validateAbbreviationsInFiles(startLines.get(), endLines.get(), abbreviationsLines.get());
         validateSecondDelimiterInAbbreviations(abbreviationsLines.get());
@@ -231,7 +231,7 @@ public class LapTimes {
 
         for (String line : timeLog) {
             if (line.length() != 3) {
-                throw new ValidationDataException("There is an error in the abbreviation in the end.log file");
+                throw new ValidationDataException("There is an error in the abbreviation in the log file");
             }
         }
     }
@@ -242,7 +242,7 @@ public class LapTimes {
 
         for (Map.Entry<String, String> entry : timeLog.entrySet()) {
             if (!entry.getValue().matches("\\d{2}:\\d{2}:\\d{2}.\\d{3}")) {
-                throw new ValidationDataException("There is an error in the abbreviation in the end.log file");
+                throw new ValidationDataException("There is an error in the date in the log file");
             }
         }
     }
