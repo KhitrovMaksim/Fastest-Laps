@@ -2,7 +2,6 @@ package ua.com.foxminded.fastestlaps;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.ParseException;
 
@@ -23,11 +22,9 @@ public class LapTimesTest {
         String errorMessage = "The number of lines in all files should be the same";
         pathToTimeLogStart = "startWithoutLine.log";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -35,11 +32,9 @@ public class LapTimesTest {
         String errorMessage = "The number of lines in all files should be the same";
         pathToTimeLogEnd = "endWithoutLine.log";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -47,11 +42,9 @@ public class LapTimesTest {
         String errorMessage = "The number of lines in all files should be the same";
         pathToabbreviations = "abbreviationsWithoutLine.txt";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -69,11 +62,9 @@ public class LapTimesTest {
         String errorMessage = "There is an error in the abbreviation in the log file";
         pathToTimeLogStart = "startWithoutTeam.log";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -81,11 +72,9 @@ public class LapTimesTest {
         String errorMessage = "There is an error in the abbreviation in the log file";
         pathToTimeLogStart = "startWrongAbbreviationLength.log";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -93,11 +82,9 @@ public class LapTimesTest {
         String errorMessage = "There is an error in the abbreviation in the abbreviations.txt file";
         pathToabbreviations = "abbreviationsWithoutAbbreviation.txt";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -105,11 +92,9 @@ public class LapTimesTest {
         String errorMessage = "There is an error in the abbreviation in the abbreviations.txt file";
         pathToabbreviations = "abbreviationsWrongAbbreviationLength.txt";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -117,11 +102,9 @@ public class LapTimesTest {
         String errorMessage = "There is an error in the abbreviation in the log file";
         pathToTimeLogEnd = "endWithoutTeam.log";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -129,11 +112,9 @@ public class LapTimesTest {
         String errorMessage = "There is an error in the abbreviation in the log file";
         pathToTimeLogEnd = "endWrongAbbreviationLength.log";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -141,11 +122,9 @@ public class LapTimesTest {
         String errorMessage = "Dates in end.log and start.log files do not match";
         pathToTimeLogStart = "startWithoutDate.log";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -153,11 +132,9 @@ public class LapTimesTest {
         String errorMessage = "There is an error in the abbreviation in the abbreviations.txt file";
         pathToabbreviations = "abbreviationsWithoutFirstDelimiter.txt";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -166,11 +143,9 @@ public class LapTimesTest {
         String errorMessage = "Missing second delimiter in the abbreviations.txt file";
         pathToabbreviations = "abbreviationsWithoutSecondDelimiter.txt";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -189,11 +164,9 @@ public class LapTimesTest {
         String errorMessage = "Dates in end.log and start.log files do not match";
         pathToTimeLogStart = "startWithoutTime.log";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -201,11 +174,9 @@ public class LapTimesTest {
         String errorMessage = "Dates in end.log and start.log files do not match";
         pathToTimeLogEnd = "endWithoutTime.log";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -213,11 +184,9 @@ public class LapTimesTest {
         String errorMessage = "Dates in end.log and start.log files do not match";
         pathToTimeLogEnd = "endWithWrongDate.log";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -225,11 +194,9 @@ public class LapTimesTest {
         String errorMessage = "Dates in end.log and start.log files do not match";
         pathToTimeLogEnd = "endWithWrongTime.log";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -237,11 +204,9 @@ public class LapTimesTest {
         String errorMessage = "There is an error in the abbreviation in files";
         pathToTimeLogEnd = "endWithWrongAbbreviation.log";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -249,11 +214,9 @@ public class LapTimesTest {
         String errorMessage = "There is an error in the abbreviation in files";
         pathToTimeLogStart = "startWithWrongAbbreviation.log";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 
     @Test
@@ -261,10 +224,8 @@ public class LapTimesTest {
         String errorMessage = "There is an error in the abbreviation in files";
         pathToabbreviations = "abbreviationsWithWrongAbbreviation.txt";
 
-        Exception exception = assertThrows(ValidationDataException.class, () -> {
+        assertThrows(ValidationDataException.class, () -> {
             lapTimes.showReport(pathToTimeLogStart, pathToTimeLogEnd, pathToabbreviations);
-        });
-
-        assertTrue(exception.getMessage().contains(errorMessage));
+        }, errorMessage);
     }
 }
